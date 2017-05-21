@@ -8,7 +8,7 @@ def load(file_name):
         with open(path.join(here, file_name), "r") as fp:
             return fp.read()
     except IOError:
-        return u""
+        return ""
 
 setup(
     name="Flask-HipPocket",

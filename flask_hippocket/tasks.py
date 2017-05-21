@@ -21,7 +21,7 @@ def autoload(app, apps_package="apps", module_name="routes", blueprint_name="rou
     if not apps_package:
         raise ValueError("No apps package provided - unable to begin autoload")
 
-    if isinstance(apps_package, basestring):
+    if isinstance(apps_package, str):
         package_code = import_string(apps_package)
     else:
         #: `apps_package` can be the already imported parent package
@@ -37,7 +37,7 @@ def autoload(app, apps_package="apps", module_name="routes", blueprint_name="rou
 
     package_paths = [path.join(app.root_path, p) for p in package_paths]
     root = apps_package
-    apps_package = apps_package + u"." if not apps_package.endswith(".") else apps_package
+    apps_package = apps_package + "." if not apps_package.endswith(".") else apps_package
 
     if on_error is None:
         on_error = lambda name: app.logger.warn("Unable to import {name}.".format(name=name))

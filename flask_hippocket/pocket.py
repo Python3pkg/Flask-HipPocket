@@ -11,6 +11,7 @@ from functools import wraps
 from werkzeug import import_string, cached_property
 
 from .tasks import autoload, setup_errors
+import collections
 
 __all__ = ("HipPocket", "LateLoader", "Mapper")
 
@@ -95,7 +96,7 @@ class HipPocket(object):
                 return f(app, *args, **kwargs)
             return inner
 
-        if not callable(func) or len(args) > 0 or len(kwargs) > 0:
+        if not isinstance(func, collections.Callable) or len(args) > 0 or len(kwargs) > 0:
             def wrapper(func):
                 task = decorator(func)
                 self.tasks.append(task)
@@ -114,7 +115,7 @@ class LateLoader(object):
 
     Taken directly from the example in `Flask's docs <http://flask.pocoo.org/docs/patterns/lazyloading/>`__"""
     def __init__(self, import_name):
-        self.__module__, self.__name__ = import_name.rsplit(u".", 1)
+        self.__module__, self.__name__ = import_name.rsplit(".", 1)
         self.import_name = import_name
 
     @cached_property
@@ -152,7 +153,7 @@ class Mapper(object):
     def add_url_rule(self, url, import_name, **url_kwargs):
         """Add a URL to the wrapped :class:`~flask.Flask` or :class:`~flask.Blueprint`'s URL map."""
 
-        import_path = u".".join([self.base_import_name, import_name])
+        import_path = ".".join([self.base_import_name, import_name])
         view = LateLoader(import_path)
 
         url_defaults = self.url_defaults.copy()
